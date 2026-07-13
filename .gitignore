@@ -1,0 +1,12 @@
+# dev-only симлинк на репозиторий интеграции для навигации в IDE
+/dev
+
+# JetBrains
+/.idea/workspace.xml
+/.idea/shelf/
+/.idea/usage.statistics.xml
+/.idea/dictionaries/
+/.idea/httpRequests/
+
+# OS
+.DS_Store

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "checkJs": false,
+    "paths": {
+      "/sboom_panel/*": ["./dev/custom_components/sboom_ha/www/*"]
+    }
+  },
+  "include": ["*.js"],
+  "exclude": ["dev"]
+}
