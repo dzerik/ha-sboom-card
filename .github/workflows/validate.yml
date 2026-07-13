@@ -1,0 +1,39 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # еженедельно, «кривой» минутой (не :00/:30) чтобы не бить в пик
+    - cron: "17 5 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  hacs:
+    name: HACS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: HACS validation (plugin)
+        uses: hacs/action@main
+        with:
+          category: plugin
+
+  lint:
+    name: Lint & syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Syntax check (ES module)
+        run: |
+          cp sboom-card.js "$RUNNER_TEMP/card.mjs"
+          node --check "$RUNNER_TEMP/card.mjs"
+      - name: Prettier format check
+        run: npx --yes prettier@3 --check "sboom-card.js"

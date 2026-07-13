@@ -1,0 +1,36 @@
+name: Release
+
+# При публикации GitHub-релиза: синхронизируем CARD_VERSION с тегом и
+# прикладываем sboom-card.js к релизу — HACS ставит именно этот asset
+# (hacs.json: "filename": "sboom-card.js").
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  attach:
+    name: Attach card to release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync CARD_VERSION to tag
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          sed -i "s/const CARD_VERSION = \"[^\"]*\";/const CARD_VERSION = \"${VER}\";/" sboom-card.js
+          echo "CARD_VERSION → ${VER}"
+          grep 'const CARD_VERSION' sboom-card.js
+
+      - name: Syntax check (ES module)
+        run: |
+          cp sboom-card.js "$RUNNER_TEMP/card.mjs"
+          node --check "$RUNNER_TEMP/card.mjs"
+
+      - name: Attach asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sboom-card.js

@@ -1,5 +1,10 @@
 # SBoom Card
 
+[![Validate](https://github.com/dzerik/ha-sboom-card/actions/workflows/validate.yml/badge.svg)](https://github.com/dzerik/ha-sboom-card/actions/workflows/validate.yml)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz)
+[![GitHub Release](https://img.shields.io/github/v/release/dzerik/ha-sboom-card)](https://github.com/dzerik/ha-sboom-card/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Компактная **Lovelace-карточка** плеера [SberBoom](https://github.com/dzerik/sboom_ha)
 для дашбордов Home Assistant: now-playing (обложка, метаданные, скраббер),
 транспорт и раскрываемый drill-down каталог Звука (поиск → артист → альбом →
@@ -19,7 +24,8 @@
 2. Установить «SBoom Card». Ресурс зарегистрируется автоматически.
 
 ### Вручную
-1. Скопировать `sboom-card.js` и `sboom-card-editor.js` в `config/www/sboom-card/`.
+1. Скопировать `sboom-card.js` (один файл — GUI-редактор инлайн) в
+   `config/www/sboom-card/`.
 2. Settings → Dashboards → ⋮ → Resources → Add:
    URL `/local/sboom-card/sboom-card.js`, тип **JavaScript Module**.
 

@@ -6,5 +6,13 @@
   "type": "module",
   "homepage": "https://github.com/dzerik/ha-sboom-card",
   "keywords": ["home-assistant", "lovelace", "sberboom", "lit", "hacs"],
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "check": "node --check <(cat sboom-card.js)",
+    "lint": "prettier --check sboom-card.js",
+    "format": "prettier --write sboom-card.js"
+  },
+  "devDependencies": {
+    "prettier": "^3"
+  }
 }
