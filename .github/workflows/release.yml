@@ -31,6 +31,6 @@ jobs:
           node --check "$RUNNER_TEMP/card.mjs"
 
       - name: Attach asset
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: sboom-card.js
