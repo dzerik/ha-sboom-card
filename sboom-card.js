@@ -16,6 +16,7 @@
  *   entry_id: <config_entry колонки>   # какую колонку показывать (мультирум)
  *   mode: compact | full               # full = сразу с browse
  *   show_browse: true|false            # раскрыть drill-down поиск/очередь
+ *   show_equalizer: true|false         # блок эквалайзера/настроек колонки (sberhome)
  */
 
 // Побочные импорты — регистрируют custom-элементы панели (те же файлы, что
@@ -26,13 +27,14 @@ import "/sboom_panel/components/sboom-controls.js";
 import "/sboom_panel/components/sboom-track-row.js";
 import "/sboom_panel/components/sboom-tile.js";
 import "/sboom_panel/components/sboom-browse.js";
+import "/sboom_panel/components/sboom-equalizer.js";
 
 import { LitElement, html, css, nothing } from "/sboom_panel/lit-base.js";
 import { SboomFeedBase } from "/sboom_panel/components/sboom-feed-base.js";
 import { tokens } from "/sboom_panel/components/sboom-tokens.css.js";
 
 const DEFAULT_GLOW = "#7C5CFF";
-const CARD_VERSION = "0.1.0";
+const CARD_VERSION = "0.2.0";
 
 /* ────────────────────────────────────────────────────────────────────────
  * GUI-редактор конфигурации карточки (инлайн в тот же модуль — HACS ставит
@@ -131,6 +133,15 @@ class SboomCardEditor extends LitElement {
             @change=${(e) => this._emit({ show_browse: e.target.checked })}
           />
           <span class="lbl">Раскрыть каталог (поиск/очередь)</span>
+        </label>
+
+        <label class="field row">
+          <input
+            type="checkbox"
+            .checked=${c.show_equalizer !== false}
+            @change=${(e) => this._emit({ show_equalizer: e.target.checked })}
+          />
+          <span class="lbl">Эквалайзер и настройки колонки</span>
         </label>
 
         <p class="hint">
@@ -251,6 +262,9 @@ class SboomCard extends SboomFeedBase {
         ? !!config.show_browse
         : this._mode === "full";
     this._browseOpen = this._showBrowse;
+    // Эквалайзер/настройки колонки (по умолчанию показываем — компонент сам
+    // скрывается, если у колонки нет эквалайзера или sberhome не установлена).
+    this._showEqualizer = config.show_equalizer !== false;
     const newEntry = config.entry_id || null;
     if (newEntry !== this._entryId) {
       this._entryId = newEntry;
@@ -328,6 +342,12 @@ class SboomCard extends SboomFeedBase {
   get _deviceName() {
     const d = this._devices.find((x) => x.entry_id === this._entryId);
     return d?.name || "SberBoom";
+  }
+
+  // serial активной колонки — мост к сущностям эквалайзера sberhome
+  get _serial() {
+    const d = this._devices.find((x) => x.entry_id === this._entryId);
+    return d?.serial || null;
   }
 
   _toggleBrowse() {
@@ -657,6 +677,10 @@ class SboomCard extends SboomFeedBase {
         sboom-browse {
           display: block;
         }
+        sboom-equalizer {
+          display: block;
+          margin-top: 12px;
+        }
 
         /* ── адаптив ── */
         @media (max-width: 480px) {
@@ -794,6 +818,16 @@ class SboomCard extends SboomFeedBase {
             }
           </div>
         </div>
+
+        <!-- эквалайзер/настройки колонки (сам скрывается, если их нет) -->
+        ${
+          this._showEqualizer
+            ? html`<sboom-equalizer
+                .hass=${this.hass}
+                .serial=${this._serial}
+              ></sboom-equalizer>`
+            : nothing
+        }
 
         <sboom-toast></sboom-toast>
       </div>

@@ -1,6 +1,6 @@
 {
   "name": "ha-sboom-card",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Компактная Lovelace-карточка плеера SberBoom для Home Assistant (no-build, Lit). Переиспользует компоненты и data-feed интеграции sboom_ha.",
   "private": true,
   "type": "module",
